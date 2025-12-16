@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project 4 – Image Segmentation Comparison</title>
+  <link rel="stylesheet" href="css/project4.css">
+</head>
+<body>
+
+  <header>
+    <h1>Satellite Image Segmentation Comparison</h1>
+    <p>Mean Shift segmentation vs. Multiresolution Segmentation for agricultural landscape analysis</p>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Project Overview</h2>
+      <p>
+        This project was developed as part of the <em>Advanced Remote Sensing</em> course (WS25). 
+        The objective was to compare two image segmentation strategies applied to a multispectral 
+        satellite image: the <strong>Mean Shift</strong> algorithm implemented in ArcGIS Pro and 
+        <strong>Multiresolution Segmentation (MRS)</strong> executed in eCognition.
+      </p>
+    </section>
+
+    <section>
+      <h2>Data & Study Area</h2>
+      <p>
+        The input dataset is a pansharpened SPOT satellite image from 2005, projected in UTM Zone 33. 
+        It contains Near-Infrared (NIR), Red, Green, and Mid-Infrared (MIR) bands. The study area was 
+        selected to analyze agricultural fields and vegetation patterns, with a focus on how 
+        different segmentation approaches handle parcel boundaries.
+      </p>
+    </section>
+
+    <section>
+      <h2>Segmentation Methods</h2>
+      <p>
+        <strong>Multiresolution Segmentation (MRS)</strong> groups neighboring pixels based on both 
+        spectral and spatial criteria such as shape, smoothness, and compactness. The scale parameter 
+        controls object heterogeneity and allows the creation of hierarchical object levels.
+      </p>
+      <p>
+        In contrast, the <strong>Mean Shift</strong> algorithm relies solely on spectral similarity, 
+        clustering pixels based on color and brightness without considering object geometry.
+      </p>
+    </section>
+
+    <section>
+      <h2>Main Result</h2>
+      <p>
+        The figure below shows the segmentation result generated in <strong>eCognition</strong> using 
+        multiresolution segmentation. The output clearly delineates agricultural parcels and produces 
+        polygon-like objects, making it well suited for object-based analysis and future machine 
+        learning applications.
+      </p>
+
+      <div class="result-image">
+        <img src="images/project-4.png" alt="Multiresolution segmentation result from eCognition" />
+        <div class="caption">Multiresolution segmentation result highlighting agricultural field boundaries</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Key Findings</h2>
+      <ul>
+        <li>Mean Shift segmentation tends to merge spectrally similar but spatially distinct fields.</li>
+        <li>Multiresolution Segmentation preserves object shapes and parcel boundaries.</li>
+        <li>eCognition outputs are more practical for object-based classification workflows.</li>
+        <li>The results show strong potential for creating training data for AI models.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2025 Sara Chaourar · ePortfolio
+  </footer>
+
+</body>
+</html>
