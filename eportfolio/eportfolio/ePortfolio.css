@@ -1,0 +1,340 @@
+/* Base Layout */
+body {
+    margin: 0;
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--sand);
+    color: var(--ink);
+}
+
+:root {
+  --sand: #EFEAE4;
+  --stone: #CFC6B8;
+  --clay: #A68A69;
+  --ocean-light: #AECBE8;
+  --ocean-mid: #7A90A8;
+  --navy: #1E2A36;
+  --ink: #0F1A2B;
+  --white: #FFFFFF;
+}
+
+/*--------------------------- Sidebar ---------------------------*/
+.sidebar {
+    width: 35%;
+    background-color: var(--navy);
+    color: var(--sand);
+    padding: 40px 30px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top row*/
+.top-row {
+    display: normal;
+    align-items: normal; /* vertically aligns photo + text */
+    justify-content: flex-start; /* put them on the left */
+    gap: 15px; /* space between photo and text */
+}
+
+/* My portfolio*/
+.section-title {
+    margin: 0;
+    padding-top: 6px;
+}
+
+/*About me*/
+.about-me {
+    margin-top: 10px;
+    line-height: 1.4;
+    font-size: 13.5px;
+    font-family: Helvetica;
+}
+
+/* Profile Photo */
+.profile-photo {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border: none;
+    float: right; /*to wrap text around*/
+    margin-bottom: 15px;
+    margin-left: 15px;
+    border-radius: 50%;
+    shape-outside: circle(50%);
+    clip-path: circle(50%);
+}
+
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.sidebar ul li {
+    margin: 12px 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: var(--sand);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.sidebar a:hover {
+    color: var(--ocean-light);
+    text-decoration: none;
+}
+
+/* Social Icons at Bottom Left */
+.socials {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.socials img {
+    width: 28px;
+    height: auto;
+    cursor: pointer;
+    filter: brightness(90%);
+    transition: 0.2s;
+}
+
+.socials img:hover {
+    filter: brightness(110%);
+}
+
+/* CV Image at Bottom Right */
+.cv-preview {
+    position: absolute;
+    bottom: 0;
+    right: 0px; /* makes it peek from the right corner */
+    width: 200px;
+    transform: translateY(20%) rotate(-12deg);
+}
+
+.cv-preview img {
+    width: 100%;
+    border: none;
+    border-radius: 0px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.cv-preview img:hover {
+    transform: scale(1.05);
+}
+
+/*------------------------------------ Main Page Area ---------------------------------------------*/
+.content {
+    width: 75%;
+    overflow-y: scroll;
+    padding: 40px 50px;
+    box-sizing: border-box;
+    background: var(--sand);
+}
+
+section {
+    margin-bottom: 80px;
+}
+
+section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 500;
+    border-bottom: none;
+    margin-bottom: 25px;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+    width: 8px;
+}
+.content::-webkit-scrollbar-thumb {
+    background: var(--ocean-mid);
+    border-radius: 4px;
+}
+
+/* Topbar navigation */
+.top-nav {
+    height: 60px;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    box-sizing: border-box;
+    background-color: none;
+}
+
+.top-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.top-nav a {
+    text-decoration: none;
+    color: #0F1A2B;
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
+    }
+
+.top-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: #0F1A2B;
+    transition: width 0.25s;
+}
+
+.top-nav a:hover::after {
+    width: 100%;
+}
+
+
+/* Projects grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 10px;
+}
+
+/* Project card styling */
+.project-card {
+    display: block;
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: #fff;
+    box-shadow: 0 8px 30px rgba(15, 26, 43, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Image inside card */
+.project-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Info inside card */
+.project-info {
+    padding: 10px 15px;
+}
+
+.project-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+}
+
+.project-info p {
+    font-size: 14px;
+    color: var(--ocean-mid);
+}
+
+/* Big card for master thesis */
+.big-card {
+    display: block;
+    margin-top: 15px;
+    height: 250px;
+}
+
+.big-card img {
+    height: 180px;
+}
+
+/* Certificates */
+#certificates {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+#certificates h2 {
+  margin-bottom: 2rem;
+}
+
+/* Wall layout */
+.certificate-wall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+/* Frame */
+.certificate-frame {
+  background: var(--white);
+  padding: 1.2rem;
+  border-radius: 12px;
+  width: 260px;
+  box-shadow: 
+    0 20px 40px rgba(15, 26, 43, 0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Image */
+.certificate-frame img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Title */
+.certificate-title {
+  display: block;
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--ocean-mid);
+  letter-spacing: 0.4px;
+}
+
+/* Tilt effects */
+.tilt-left {
+  transform: rotate(-2deg);
+}
+
+.tilt-right {
+  transform: rotate(2deg);
+}
+
+/* Hover effect */
+.certificate-frame:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Mobile friendly */
+@media (max-width: 600px) {
+  .certificate-frame {
+    width: 90%;
+  }
+}
+
