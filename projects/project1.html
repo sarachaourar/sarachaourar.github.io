@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Algeria 2021 Wildfires | Google Earth Engine Project</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Google Earth Engine application analyzing the 2021 wildfires in Algeria using Sentinel-2 imagery.">
+  <link rel="stylesheet" href="css/project1.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Algeria 2021 Wildfires</h1>
+  <p>
+    Interactive change-detection map of the 2021 wildfire events in Algeria using
+    Sentinel-2 Level-2A imagery processed in Google Earth Engine.
+  </p>
+</header>
+
+<main>
+
+  <section>
+    <h2>Interactive Map</h2>
+    <div class="iframe-container">
+      <iframe
+        src="https://sarachaourar1.users.earthengine.app/view/algeria2021wildfires"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>
+      This project visualizes and analyzes wildfire-affected areas in Algeria
+      during the 2021 fire season. The application allows interactive exploration
+      of Sentinel-2 imagery before and after fire events, the false color composite highlights vegetation
+      changes and burn impacts after the fire.
+    </p>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <h3>Study Area</h3>
+        <p>
+          Tizi Ouzou state, Algeria, with a focus on wildfire affected regions during the summer of 2021.
+        </p>
+      </div>
+
+      <div class="info-box">
+        <h3>Data Source</h3>
+        <p>
+          Copernicus Sentinel-2 Level-2A (surface reflectance),
+          accessed via Google Earth Engine.
+        </p>
+      </div>
+
+      <div class="info-box">
+        <h3>Platform</h3>
+        <p>
+          Google Earth Engine for cloud-based processing,
+          visualization, and interactive mapping.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Methods</h2>
+    <p>
+      The workflow includes spatial and temporal filtering over the study area,
+      cloud-masked Sentinel-2 imagery selection, and visual interpretation
+      of vegetation changes using false-color composites.
+      This application demonstrates how Earth observation data can support
+      wildfire monitoring and environmental assessment.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  © 2025 • Project by <span>Sara Chaourar</span> • Powered by Google Earth Engine
+</footer>
+
+</body>
+</html>
