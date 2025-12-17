@@ -103,7 +103,7 @@ body {
     bottom: 20px;
     left: 20px;
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .socials img {
@@ -114,7 +114,7 @@ body {
 }
 
 .icon-github {
-    width: 30px;
+    width: 50px;
 }
 
 .icon-linkedin {
@@ -344,5 +344,6 @@ section h2 {
     width: 90%;
   }
 }
+
 
 
