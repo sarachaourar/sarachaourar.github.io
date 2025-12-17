@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project 4 – Image Segmentation Comparison</title>
-  <link rel="stylesheet" href="css/project4.css">
+  <link rel="stylesheet" href="../css/project4.css">
 </head>
 <body>
 
   <header>
     <h1>Satellite Image Segmentation Comparison</h1>
-    <p>Mean Shift segmentation vs. Multiresolution Segmentation for agricultural landscape analysis</p>
+    <p>Multiresolution Segmentation using eCognition</p>
   </header>
 
   <main>
@@ -28,10 +28,8 @@
     <section>
       <h2>Data & Study Area</h2>
       <p>
-        The input dataset is a pansharpened SPOT satellite image from 2005, projected in UTM Zone 33. 
-        It contains Near-Infrared (NIR), Red, Green, and Mid-Infrared (MIR) bands. The study area was 
-        selected to analyze agricultural fields and vegetation patterns, with a focus on how 
-        different segmentation approaches handle parcel boundaries.
+        The input dataset is a pansharpened SPOT satellite image from 2005. 
+        False color composite was used to visualise land cover types and vegetation health.
       </p>
     </section>
 
@@ -58,12 +56,12 @@
       </p>
 
       <div class="result-image">
-        <img src="images/project-4.png" alt="Multiresolution segmentation result from eCognition" />
+        <img src="../images/project-4.png" alt="Multiresolution segmentation result from eCognition" />
         <div class="caption">Multiresolution segmentation result highlighting agricultural field boundaries</div>
       </div>
     </section>
 
-    <section>
+   <!-- <section>
       <h2>Key Findings</h2>
       <ul>
         <li>Mean Shift segmentation tends to merge spectrally similar but spatially distinct fields.</li>
@@ -71,7 +69,7 @@
         <li>eCognition outputs are more practical for object-based classification workflows.</li>
         <li>The results show strong potential for creating training data for AI models.</li>
       </ul>
-    </section>
+    </section> -->
 
   </main>
 
@@ -81,3 +79,4 @@
 
 </body>
 </html>
+
