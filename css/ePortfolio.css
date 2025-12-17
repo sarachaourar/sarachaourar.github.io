@@ -345,5 +345,107 @@ section h2 {
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+}
 
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .top-row {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-photo {
+    float: none;
+    margin: 0 auto 20px auto;
+    width: 130px;
+    height: 130px;
+  }
+
+  .about-me {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: left;
+  }
+}
+
+@media (max-width: 768px) {
+  .socials {
+    position: static;
+    justify-content: center;
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .cv-preview {
+    position: static;
+    width: 140px;
+    margin: 20px auto 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    width: 100%;
+    padding: 25px 20px;
+    overflow: visible;
+  }
+
+  section {
+    margin-bottom: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 10px 0;
+    height: auto;
+  }
+
+  .top-nav ul {
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  iframe {
+    height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .certificate-wall {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .certificate-frame {
+    width: 90%;
+    transform: none !important;
+  }
+}
 
