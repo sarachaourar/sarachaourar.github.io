@@ -1,155 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coming Soon</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --sand: #EFEAE4;
-      --stone: #CFC6B8;
-      --clay: #A68A69;
-      --ocean-light: #AECBE8;
-      --ocean-mid: #7A90A8;
-      --navy: #1E2A36;
-      --ink: #0F1A2B;
-      --white: #FFFFFF;
-    }
-
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Inter', Helvetica, Arial, sans-serif;
-      background: var(--sand);
-      color: var(--ink);
-    }
-
-    .coming-soon-wrapper {
-      display: flex;
-      max-width: 900px;
-      width: 90%;
-      min-height: 420px;
-      box-shadow: 0 25px 60px rgba(15, 26, 43, 0.15);
-      border-radius: 24px;
-      overflow: hidden;
-      background: var(--white);
-    }
-
-    /* Left visual panel */
-    .visual-panel {
-      width: 40%;
-      background: var(--navy);
-      padding: 40px 35px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .visual-panel h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      font-weight: 500;
-      color: var(--sand);
-      margin: 0;
-    }
-
-    .visual-panel p {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--stone);
-      margin-top: 10px;
-    }
-
-    .accent-line {
-      width: 50px;
-      height: 2px;
-      background: var(--ocean-light);
-      margin-top: 20px;
-    }
-
-    /* Right content panel */
-    .content-panel {
-      width: 60%;
-      padding: 50px 60px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .content-panel h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
-
-    .content-panel p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--ocean-mid);
-      max-width: 420px;
-    }
-
-    .status {
-      margin-top: 30px;
-      font-size: 13px;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      color: var(--clay);
-      font-weight: 500;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .coming-soon-wrapper {
-        flex-direction: column;
-      }
-
-      .visual-panel,
-      .content-panel {
-        width: 100%;
-      }
-
-      .content-panel {
-        padding: 40px 30px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generation of Displacement Map – InSAR</title>
 </head>
+
 <body>
 
-  <div class="coming-soon-wrapper">
+    <main class="report">
 
-    <div class="visual-panel">
-      <div>
-        <h1>Coming Soon</h1>
-        <div class="accent-line"></div>
-        <p>
-          This section of the portfolio is currently under development.
-        </p>
-      </div>
+        <header>
+            <h1>Radio Detection and Ranging: Generation of Displacement Map</h1>
+            <p>
+                <strong>Course:</strong> Advanced Remote Sensing (25W856231)<br>
+                <strong>Author:</strong> Sara Chaourar<br>
+                <strong>Email:</strong> sara.chaourar@stud.plus.ac.at<br>
+                <strong>Semester:</strong> WS 2025
+            </p>
+        </header>
 
-      <p style="font-size:12px; color: var(--stone);">
-        © Sara Chaourar
-      </p>
-    </div>
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            <p>
+                Imaging Radar has been widely used for the past 50 years for remote sensing applications
+                (Lang et al., 2025). With advances in radar technology, Synthetic Aperture Radar (SAR)
+                emerged, providing high-resolution, weather-independent images during day and night.
+            </p>
+            <p>
+                SAR is applied in geoscience and climate change research, environmental monitoring,
+                elevation model generation, change detection, and Earth surface exploration
+                (Moreira et al., 2013).
+            </p>
+            <p>
+                This assignment focuses on SAR interferometry (InSAR). Two images acquired at different
+                times were used in a differential interferometry (D-InSAR) approach to generate a
+                displacement map of the Beirut harbour area affected by the August 2020 explosion.
+            </p>
+            <p>
+                A major challenge in InSAR is phase ambiguity, as the sensor measures phase modulo 2π.
+                Phase unwrapping resolves this ambiguity, allowing displacement to be retrieved with
+                centimetric or millimetric accuracy.
+            </p>
+        </section>
 
-    <div class="content-panel">
-      <h2>Work in Progress</h2>
-      
-      <div class="status">Launching soon</div>
-    </div>
+        <section id="study-area">
+            <h2>2. Study Area and Event</h2>
+            <p>
+                On August 4th, 2020, a fire at the port of Beirut ignited approximately 2,750 tonnes of
+                ammonium nitrate, causing one of the largest non-nuclear explosions ever recorded.
+            </p>
+            <p>
+                According to the USGS Earthquake Hazard Program, the explosion generated seismic waves
+                equivalent to a magnitude 3.3 earthquake, roughly corresponding to 1,100 tons of TNT.
+            </p>
+            <p>
+                The site is particularly relevant due to the extreme intensity of the event and the
+                availability of satellite and seismic data for analysis.
+            </p>
+        </section>
 
-  </div>
+        <section id="dataset">
+            <h2>3. Dataset</h2>
+
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Slave Image</th>
+                        <th>Master Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Date</td><td>25 July 2020</td><td>6 August 2020</td></tr>
+                    <tr><td>Mode</td><td>IW</td><td>IW</td></tr>
+                    <tr><td>Satellite</td><td>Sentinel-1B</td><td>Sentinel-1B</td></tr>
+                    <tr><td>Orbit Number</td><td>22622</td><td>22797</td></tr>
+                    <tr><td>Pass Direction</td><td>Descending</td><td>Descending</td></tr>
+                    <tr><td>Polarization</td><td>VV + VH</td><td>VV + VH</td></tr>
+                    <tr><td>Product Type</td><td>SLC</td><td>SLC</td></tr>
+                    <tr><td>Path</td><td>21</td><td>21</td></tr>
+                    <tr><td>Frame</td><td>480</td><td>480</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="methodology">
+            <h2>4. Methodology</h2>
+            <p>
+                The dataset was acquired from the Alaska Satellite Facility (ASF) archive and processed
+                using ESA SNAP software.
+            </p>
+            <ul>
+                <li>Sub-swath selection and orbit file application</li>
+                <li>Coregistration of master and slave images</li>
+                <li>Topographic interferogram generation</li>
+                <li>Removal of topographic phase using SRTM 1Sec DEM</li>
+                <li>Multilooking (8 range, 2 azimuth)</li>
+                <li>Goldstein filtering (α = 0.6)</li>
+                <li>Phase unwrapping using SNAPHU</li>
+                <li>Phase-to-displacement conversion</li>
+                <li>Terrain correction (WGS84)</li>
+            </ul>
+            <p>
+                The workflow resulted in 15 intermediate products within the SNAP environment.
+            </p>
+        </section>
+
+        <section id="results">
+            <h2>5. Results and Discussion</h2>
+            <p>
+                The displacement map shows ground deformation linked to the Beirut explosion.
+                Subsidence values below -2.5 cm indicate significant displacement around the harbour.
+            </p>
+            <p>
+                Maximum observed displacement reached approximately -2.7 cm. Due to the surface nature
+                of the explosion, seismic waves did not propagate over large distances.
+            </p>
+            <p>
+                While the overall quality is sufficient for visualisation, noise artifacts and uniform
+                negative displacement suggest minor inaccuracies, possibly linked to orbit geometry.
+            </p>
+        </section>
+
+        <section id="annex">
+            <h2>Annex</h2>
+
+            <h3>a. Phase–Displacement Relationship</h3>
+            <p>
+                Δr = (λ / 2π) · m · ψ(s)
+            </p>
+            <p>
+                Where λ is the radar wavelength, ψ(s) the absolute phase difference, and m the
+                transmit–receive factor.
+            </p>
+
+            <h3>b. Geometric Relationship</h3>
+            <p>
+                Δr = (B / (r(s) · sinθ)) · h(s)
+            </p>
+            <p>
+                Where B is the baseline, r(s) the slant range, θ the incidence angle, and h(s) the terrain height.
+            </p>
+        </section>
+
+        <section id="references">
+            <h2>References</h2>
+            <ul>
+                <li>Agapiou, A. (2020). Sensors, 20(21), 6382.</li>
+                <li>Al-Jazeera Staff (2022). How big was the Beirut explosion?</li>
+                <li>Moreira et al. (2013). IEEE GRSM.</li>
+                <li>USGS (2020). M 3.3 Explosion — Beirut, Lebanon.</li>
+                <li>Yu et al. (2019). IEEE GRSM.</li>
+            </ul>
+        </section>
+
+    </main>
 
 </body>
 </html>
