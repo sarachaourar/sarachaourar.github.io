@@ -227,16 +227,16 @@ section h2 {
     position: relative;
 }
 
-    /* horizontal lines beside title (like your image) */
-    .affiliations-title::before,
-    .affiliations-title::after {
-        content: "";
-        display: inline-block;
-        width: 80px;
-        height: 1px;
-        background: #9fb3b3;
-        vertical-align: middle;
-        margin: 0 18px;
+/*horizontal lines beside title*/
+.affiliations-title::before,
+.affiliations-title::after {
+    content: "";
+    display: inline-block;
+    width: 80px;
+    height: 1px;
+    background: #9fb3b3;
+    vertical-align: middle;
+    margin: 0 18px;
     }
 
 .affiliations-grid {
@@ -248,19 +248,19 @@ section h2 {
     margin: 0 auto 30px;
 }
 
-    .affiliations-grid img {
-        max-height: 90px;
-        margin: auto;
-        object-fit: contain;
-        opacity: 0.95;
-        transition: transform 0.4s ease, opacity 0.4s ease;
+.affiliations-grid img {
+    max-height: 90px;
+    margin: auto;
+    object-fit: contain;
+    opacity: 0.95;
+    transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-        /* subtle motion (clean & academic) */
-        .affiliations-grid img:hover {
-            transform: translateY(-6px);
-            opacity: 1;
-        }
+/* motion */
+.affiliations-grid img:hover {
+    transform: translateY(-6px);
+    opacity: 1;
+}
 
 .eu-funding-text {
     font-size: 0.85rem;
@@ -395,4 +395,5 @@ section h2 {
     width: 90%;
   }
 }
+
 
