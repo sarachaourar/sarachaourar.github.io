@@ -256,6 +256,18 @@ section h2 {
     transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
+.plus-logo {
+    max-height: 70px;
+}
+
+.copernicus-logo {
+    max-height: 90px;
+}
+
+.ubs-logo {
+    max-height: 60px;
+}
+
 /* motion */
 .affiliations-grid img:hover {
     transform: translateY(-6px);
@@ -395,5 +407,6 @@ section h2 {
     width: 90%;
   }
 }
+
 
 
