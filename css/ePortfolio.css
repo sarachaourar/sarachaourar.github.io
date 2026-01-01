@@ -257,15 +257,15 @@ section h2 {
     }
 
 .plus-logo {
-    max-height: 100px;
+    max-height: 150px;
 }
 
 .copernicus-logo {
-    max-height: 90px;
+    max-height: 100px;
 }
 
 .ubs-logo {
-    max-height: 40px;
+    max-height: 30px;
 }
 
 /* motion */
@@ -407,6 +407,7 @@ section h2 {
     width: 90%;
   }
 }
+
 
 
 
