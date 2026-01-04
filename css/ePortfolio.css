@@ -151,7 +151,7 @@ body {
 }
 
 .socials img {
-    width: 28px;
+    width: 40px;
     height: auto;
     cursor: pointer;
     filter: brightness(90%);
@@ -510,6 +510,7 @@ section h2 {
 .contact-links a:hover {
     border-color: var(--ocean-mid);
 }
+
 
 
 
