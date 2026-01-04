@@ -150,15 +150,7 @@ body {
     gap: 15px;
 }
 
-.icon-github img {
-    width: 58px;
-    height: auto;
-    cursor: pointer;
-    filter: brightness(90%);
-    transition: 0.2s;
-}
-
-.icon-linkedin img {
+.socials img {
     width: 28px;
     height: auto;
     cursor: pointer;
@@ -509,6 +501,7 @@ section h2 {
 .contact-links a:hover {
     border-color: var(--ocean-mid);
 }
+
 
 
 
