@@ -158,6 +158,14 @@ body {
     transition: 0.2s;
 }
 
+.icon-github {
+    width: 30px;
+}
+
+.icon-linkedin {
+    width: 24px;
+}
+
 .socials img:hover {
     filter: brightness(110%);
 }
@@ -219,6 +227,7 @@ section h2 {
     border-bottom: none;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     padding: 0 30px;
     box-sizing: border-box;
     background-color: none;
@@ -501,6 +510,7 @@ section h2 {
 .contact-links a:hover {
     border-color: var(--ocean-mid);
 }
+
 
 
 
