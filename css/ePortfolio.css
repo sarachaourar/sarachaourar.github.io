@@ -50,7 +50,7 @@ body {
 .about-me {
     margin-top: 10px;
     line-height: 1.4;
-    font-size: 13.5px;
+    font-size: 12px;
     font-family: Helvetica;
 }
 
@@ -150,7 +150,15 @@ body {
     gap: 15px;
 }
 
-.socials img {
+.icon-github img {
+    width: 58px;
+    height: auto;
+    cursor: pointer;
+    filter: brightness(90%);
+    transition: 0.2s;
+}
+
+.icon-linkedin img {
     width: 28px;
     height: auto;
     cursor: pointer;
@@ -501,6 +509,7 @@ section h2 {
 .contact-links a:hover {
     border-color: var(--ocean-mid);
 }
+
 
 
 
