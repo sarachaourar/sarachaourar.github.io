@@ -321,6 +321,10 @@ section h2 {
     max-height: 30px;
 }
 
+.europeanunionlogo {
+    max-height: 200px;
+}
+
 /* motion */
 .affiliations-grid img:hover {
     transform: translateY(-6px);
@@ -510,6 +514,7 @@ section h2 {
 .contact-links a:hover {
     border-color: var(--ocean-mid);
 }
+
 
 
 
