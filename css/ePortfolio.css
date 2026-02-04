@@ -294,7 +294,7 @@ section h2 {
 
 .affiliations-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
     gap: 40px;
     align-items: center;
     max-width: 900px;
@@ -322,6 +322,9 @@ section h2 {
 }
 
 .europeanunionlogo {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 20px;
     max-height: 200px;
 }
 
