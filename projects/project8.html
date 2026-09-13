@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Local Thresholding – SAR Oil Slick Detection</title>
+    <link rel="stylesheet" href="../css/project4.css">
+</head>
+
+<body>
+
+    <main class="report">
+
+        <header>
+            <h1>Synthetic Aperture Radar: Detection of Oil Slicks via Adaptive Local Thresholding</h1>
+            <p>
+                Detection of a marine oil slick in Sentinel-1 SAR imagery using an adaptive local thresholding
+                algorithm, validated against the August 2017 oil spill at Al Khiran, Kuwait.
+            </p>
+        </header>
+<!--
+        <p>
+            <strong>Course:</strong> [Course name]<br>
+            <strong>Author:</strong> Sara Chaourar<br>
+            <strong>Email:</strong> sara.chaourar@stud.plus.ac.at<br>
+            <strong>Semester:</strong> [Semester]
+        </p>
+-->
+
+        <section>
+            <h2>Detection Result</h2>
+            <div class="result-image">
+                <img src="../images/oil-spill.png" alt="Binary oil slick detection mask, VV backscatter image in decibels, and SkyTruth manual ground-truth delineation for the Al Khiran, Kuwait oil spill" />
+                <div class="caption">Detection mask (top), VV backscatter in decibels (centre), and SkyTruth's manually mapped reference delineation (bottom), Al Khiran, Kuwait, 10 August 2017</div>
+            </div>
+        </section>
+
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            <p>
+                Oil spills are among the most damaging forms of marine pollution. Roughly 18% of the oil
+                entering the ocean each year originates from rigs and tankers, producing sudden, concentrated
+                slicks that can devastate the coastline they reach.
+            </p>
+            <p>
+                Crude oil carries polycyclic aromatic hydrocarbons that persist in tissue and water long after
+                a spill, along with volatile compounds that turn toxic on evaporation. Slicks coat feathers and
+                fur, strip their insulating properties, and can drown or suffocate wildlife unable to escape them.
+            </p>
+            <p>
+                Because the outcome of a spill response is largely decided within its first hours, responders
+                need a fast, reliable way to locate and delineate a slick. Synthetic Aperture Radar (SAR) is
+                well suited to this task, imaging the ocean surface independent of cloud cover, daylight, or
+                weather. Wind roughens open water into small waves that scatter radar pulses back to the
+                sensor as a bright return; oil dampens those same waves and smooths the surface, so a slick
+                appears as a dark patch against an otherwise bright sea. The same effect, however, is produced
+                by low-wind areas, rain cells, upwelling, and natural surface films, none of which are oil —
+                these look-alikes are the central problem this project has to reckon with.
+            </p>
+            <p>
+                This project implements a simple, transparent adaptive-thresholding algorithm for detecting
+                oil slicks in Sentinel-1 SAR imagery, and benchmarks it against a documented spill.
+            </p>
+        </section>
+
+        <section id="study-area">
+            <h2>2. Study Area and Event</h2>
+            <p>
+                On 10 August 2017, an estimated 132,500 litres of crude oil leaked into the sea off Al Khiran,
+                Kuwait, near the Al Khafji offshore field.
+            </p>
+            <p>
+                The spill is documented and was independently mapped by SkyTruth, an environmental monitoring
+                organisation, which provides a ground-truth reference against which the algorithm's output can
+                be benchmarked.
+            </p>
+            <p>
+                The site is particularly relevant due to the availability of both satellite imagery and an
+                independent manual delineation for the same event.
+            </p>
+        </section>
+
+        <section id="dataset">
+            <h2>3. Dataset</h2>
+
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Date</td><td>10 August 2017, 02:47 UTC</td></tr>
+                    <tr><td>Satellite</td><td>Sentinel-1A</td></tr>
+                    <tr><td>Mode</td><td>IW</td></tr>
+                    <tr><td>Polarization</td><td>VV</td></tr>
+                    <tr><td>Product Type</td><td>RTC (Radiometrically Terrain Corrected)</td></tr>
+                    <tr><td>Source</td><td>Microsoft Planetary Computer (STAC catalog)</td></tr>
+                    <tr><td>Study Area</td><td>Al Khiran, Kuwait</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="methodology">
+            <h2>4. Methodology</h2>
+            <p>
+                The pipeline queries and processes Sentinel-1 imagery directly from a cloud-native archive,
+                avoiding manual downloads:
+            </p>
+            <ul>
+                <li>Query Sentinel-1 RTC scene via STAC from the Microsoft Planetary Computer (IW mode, VV polarization)</li>
+                <li>Reproject to EPSG:4326 and crop to the bounding box of the reported spill site</li>
+                <li>Convert the VV band to decibel scale (10·log₁₀)</li>
+                <li>Compute a local mean backscatter surface using a moving 300×300 px window</li>
+                <li>Subtract a fixed 3.5 dB offset from the local mean to define a spatially adaptive threshold</li>
+                <li>Flag pixels darker than their local threshold as candidate oil pixels, producing a binary mask</li>
+            </ul>
+            <p>
+                The full sequence runs end-to-end in under fifteen minutes.
+            </p>
+        </section>
+
+        <section id="results">
+            <h2>5. Results and Discussion</h2>
+            <p>
+                The resulting binary mask was compared against SkyTruth's independent manual delineation of
+                the same spill. The adaptive approach successfully flagged much of the darkened area
+                corresponding to the documented slick, showing that a simple, locally adaptive rule can
+                produce a usable first-pass detection map.
+            </p>
+            <p>
+                Three limitations were evident in this run. SAR speckle produced isolated single-pixel false
+                positives scattered across open water, where individual noise grains dipped just far enough
+                below the local mean to be flagged despite no oil being present. The Al Khiran coastline
+                itself was also flagged, since bare terrain can return backscatter as low as an oil-covered
+                sea surface and no land mask was applied. Finally, the 300×300 px window cannot be computed
+                within roughly 150 px of any image edge, leaving an unanalysed border around the scene; a
+                spill located there would go undetected, a limitation that scales directly with window size.
+            </p>
+        </section>
+
+        <section id="annex">
+            <h2>Annex</h2>
+
+            <h3>a. Adaptive Threshold</h3>
+            <p>
+                T(x, y) = μ_w(x, y) − Δ
+            </p>
+            <p>
+                Where μ_w(x, y) is the local mean backscatter, in dB, computed over a w × w moving window
+                centred at pixel (x, y), and Δ is a fixed offset (3.5 dB in this study). Pixels with
+                backscatter below T(x, y) are flagged as candidate oil pixels.
+            </p>
+        </section>
+
+        <section id="references">
+            <h2>References</h2>
+            <ul>
+                <li>Chaourar, S. (2026). SAR-based Oil Slicks Detection: An Adaptive Local Thresholding Approach. Paris Lodron University of Salzburg.</li>
+                <li>SkyTruth — manual ground-truth delineation of the Al Khiran, Kuwait spill.</li>
+                <li>ESA Copernicus Sentinel-1 imagery, accessed via the Microsoft Planetary Computer.</li>
+            </ul>
+        </section>
+
+        <section id="resources">
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="A2_Chaourar.pdf" target="_blank" rel="noopener">Full report (PDF)</a></li>
+                <li><a href="sara_chaourar_oil_spill.pptx" target="_blank" rel="noopener">Presentation slides</a></li>
+                <li><a href="#" target="_blank" rel="noopener">Jupyter notebook</a> — add link once hosted</li>
+            </ul>
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAR-Based Oil Slick Detection — Sara Chaourar</title>
+    <link rel="stylesheet" href="../css/project4.css">
+    <style>
+        /* Minimal, neutral styling for the elements that don't already exist
+           as plain tags on the rest of the site (h1/h2/h3/p/ul/table/a are
+           left alone so they inherit project4.css directly). */
+        :root{
+            --panel:      #f6f6f4;
+            --line:       #dddddd;
+            --text-muted: #555555;
+            --text-faint: #888888;
+            --accent:     #2f6f6b;
+            --warn:       #a15c1f;
+            --radius:     3px;
+        }
+
+        .hero{ padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:12px; }
+        .eyebrow{ font-size:0.85rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-faint); margin:0 0 10px 0; }
+        .stat-table{ margin-top:22px; width:100%; }
+        .stat-table td{ font-size:0.92rem; }
+        .stat-table td:first-child{ font-weight:600; white-space:nowrap; width:1%; }
+
+        p.lede{ font-size:1.05rem; }
+
+        .demo{ border:1px solid var(--line); background:var(--panel); border-radius:var(--radius); padding:20px; margin-top:16px; }
+        .demo-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+        .demo-head h4{ margin:0; font-size:0.9rem; color:var(--text-muted); font-weight:600; }
+        .demo-readout{ font-size:0.85rem; color:var(--text-muted); }
+        canvas#threshCanvas{ width:100%; height:220px; display:block; background:#ffffff; border:1px solid var(--line); border-radius:var(--radius); }
+        .demo-controls{ display:flex; gap:24px; margin-top:16px; flex-wrap:wrap; }
+        .control{ flex:1 1 220px; }
+        .control label{ display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted); margin-bottom:6px; }
+        .legend{ display:flex; gap:18px; flex-wrap:wrap; margin-top:14px; }
+        .legend span{ font-size:0.82rem; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
+        .swatch{ width:10px; height:10px; display:inline-block; border-radius:2px; }
+
+        .workflow{ padding-left:20px; }
+        .workflow li{ margin-bottom:14px; }
+
+        .limitation{ border:1px solid var(--line); border-left:3px solid var(--warn); background:var(--panel); border-radius:var(--radius); padding:16px 18px; margin-bottom:14px; }
+        .limitation h4{ margin:0 0 6px 0; font-size:0.98rem; }
+        .tag-mini{ font-size:0.72rem; font-weight:normal; color:var(--warn); border:1px solid var(--warn); border-radius:2px; padding:1px 6px; margin-left:8px; }
+
+        .outcomes{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        @media (max-width:640px){ .outcomes{ grid-template-columns:1fr; } }
+        .outcome{ border:1px solid var(--line); background:var(--panel); border-radius:var(--radius); padding:16px 18px; }
+        .outcome .idx{ display:block; font-size:0.72rem; color:var(--text-faint); letter-spacing:0.04em; margin-bottom:6px; }
+        .outcome h4{ margin:0 0 6px 0; font-size:0.95rem; }
+
+        ul.resources{ list-style:none; padding:0; display:flex; flex-direction:column; gap:8px; }
+
+        footer{ margin-top:36px; padding-top:16px; border-top:1px solid var(--line); }
+        footer p{ font-size:0.85rem; color:var(--text-faint); }
+    </style>
+</head>
+
+<body>
+
+    <main class="report">
+
+        <header class="hero">
+            <p class="eyebrow">Analysis &amp; Modeling — Remote Sensing</p>
+            <h1>Reading the ocean's dark signature</h1>
+            <p class="lede">A cloud-native pipeline that turns raw Sentinel-1 radar into a candidate oil-slick map — built and tested against a real spill, and honest about where it still gets fooled.</p>
+            <table class="stat-table" border="1" cellpadding="8" cellspacing="0">
+                <tr><td>14m 38s</td><td>API call to binary mask</td></tr>
+                <tr><td>300×300 px</td><td>adaptive threshold window</td></tr>
+                <tr><td>−3.5 dB</td><td>detection offset below local mean</td></tr>
+                <tr><td>Aug 2017</td><td>Al Khiran, Kuwait — case study</td></tr>
+            </table>
+        </header>
+
+        <section id="problem">
+            <h2>1. Why it matters</h2>
+            <p class="lede">Around 18% of the roughly two million tonnes of oil that enters the sea each year comes from rigs and tankers — sudden, concentrated, and devastating to the coastline it hits.</p>
+            <p>Crude oil carries polycyclic aromatic hydrocarbons that persist in tissue and water long after a spill, and volatile compounds that turn toxic the moment they evaporate. Slicks coat feathers and fur, strip their insulation, and drown or suffocate the animals that can't escape them.</p>
+            <p>The outcome of a spill response is largely decided in its first hours. Responders need to know where the oil is, how large it is, and which way it's moving — before the window to contain it closes. That urgency is the whole reason this project exists: can a simple, transparent algorithm deliver a usable map fast enough to matter?</p>
+        </section>
+
+        <section id="sar">
+            <h2>2. Why radar sees what the eye can't</h2>
+            <p class="lede">Synthetic Aperture Radar images through cloud and darkness — and oil happens to leave a signature it can't hide from.</p>
+            <h3>The physics in one line</h3>
+            <p>Wind roughens open water into small waves that scatter radar pulses back to the sensor as a bright signal. Oil dampens those same waves, smooths the surface, and sends less energy back — so a slick shows up as a dark scar on an otherwise bright sea.</p>
+            <h3>The catch: look-alikes</h3>
+            <p>Low wind, rain cells, upwelling, and natural surface films dampen the sea in exactly the same way. Anything that reduces backscatter can be mistaken for oil — which is the central problem this project has to reckon with, not just detect around.</p>
+        </section>
+
+        <section id="method">
+            <h2>3. The method: adaptive local thresholding</h2>
+            <p class="lede">A single fixed threshold doesn't work — ocean brightness drifts across a scene with wind, sea state, and viewing geometry. So the threshold has to move with it.</p>
+            <p>For every pixel, the algorithm looks at its surrounding 300×300 px neighbourhood, computes the local mean backscatter, and subtracts a fixed 3.5 dB offset. Anything darker than that local, moving reference is flagged as a candidate oil pixel. Drag the controls below to see the logic play out on a simulated backscatter profile — the same idea the real pipeline applies across an entire SAR scene.</p>
+
+            <div class="demo">
+                <div class="demo-head">
+                    <h4>ADAPTIVE THRESHOLD — SIMULATED BACKSCATTER PROFILE</h4>
+                    <span class="demo-readout" id="readout">— candidate px flagged</span>
+                </div>
+                <canvas id="threshCanvas"></canvas>
+                <div class="legend">
+                    <span><span class="swatch" style="background:#666666"></span>Backscatter (dB)</span>
+                    <span><span class="swatch" style="background:#2f6f6b"></span>Local mean (window)</span>
+                    <span><span class="swatch" style="background:#a13a2f"></span>Threshold (mean − offset)</span>
+                    <span><span class="swatch" style="background:#1a1a1a"></span>Flagged as candidate</span>
+                </div>
+                <div class="demo-controls">
+                    <div class="control">
+                        <label>WINDOW SIZE <b id="winVal">300 px</b></label>
+                        <input type="range" id="winSlider" min="40" max="480" value="300" step="10">
+                    </div>
+                    <div class="control">
+                        <label>OFFSET <b id="offVal">3.5 dB</b></label>
+                        <input type="range" id="offSlider" min="0" max="70" value="35" step="1">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pipeline">
+            <h2>4. From API call to binary mask</h2>
+            <p>A genuine sequence, run start to finish in under fifteen minutes:</p>
+            <ol class="workflow">
+                <li><strong>Query Sentinel-1 RTC via STAC</strong> — IW swath, VV polarization, fetched directly from the Microsoft Planetary Computer's open catalog — no manual download.</li>
+                <li><strong>Reproject and crop</strong> — the scene is reprojected to EPSG:4326 and cropped to the bounding box around the reported spill site.</li>
+                <li><strong>Convert to decibel scale</strong> — the VV band is transformed logarithmically (10·log₁₀) so brightness differences match how backscatter is conventionally read.</li>
+                <li><strong>Compute the local threshold surface</strong> — a 300×300 px moving window sweeps the scene, offset by 3.5 dB below each neighbourhood's mean.</li>
+                <li><strong>Generate the binary mask</strong> — pixels darker than their local threshold are flagged as oil candidates, ready for a human analyst to review.</li>
+            </ol>
+        </section>
+
+        <section id="case-study">
+            <h2>5. Case study — Al Khiran, Kuwait, 2017</h2>
+            <p><em>10 Aug 2017 · 02:47 UTC</em></p>
+            <p class="lede">On August 10, 2017, roughly 132,500 litres of crude leaked off Kuwait's Al Khiran coast, next to the Al Khafji offshore field — a real, documented incident used here to pressure-test the pipeline against ground truth.</p>
+            <p>A Sentinel-1A scene acquired the same morning was run through the full workflow and benchmarked against an independent reference delineation from SkyTruth, the environmental monitoring organization that mapped the spill by hand.</p>
+
+            <div class="result-image">
+                <img src="../images/oil-spill.png" alt="Three-panel figure: binary oil spill detection mask, VV backscatter image in decibels, and SkyTruth manual ground-truth delineation for the Al Khiran, Kuwait oil spill, 10 August 2017." />
+                <div class="caption">Fig. 1 — Detection mask (top), VV backscatter in decibels (centre), and SkyTruth's manually mapped reference delineation (bottom), Al Khiran, Kuwait, 10 August 2017.</div>
+            </div>
+        </section>
+
+        <section id="limitations">
+            <h2>6. Where it breaks — and why that's the point</h2>
+            <p class="lede">A method that only ever gets praised hasn't been tested hard enough. Three failure modes showed up clearly in the Kuwait run:</p>
+
+            <div class="limitation">
+                <h4>SAR speckle <span class="tag-mini">False positives</span></h4>
+                <p>Instead of one coherent slick shape, the mask came back as a scatter of isolated single-pixel hits across open water — individual speckle grains dipping just far enough below the local mean to get flagged, with no real film present.</p>
+            </div>
+            <div class="limitation">
+                <h4>Coastal terrain look-alikes <span class="tag-mini">False positives</span></h4>
+                <p>Land can return backscatter as low as an oil-covered sea surface. With no land mask applied, the Al Khiran coastline itself was flagged solidly — the same look-alike problem documented for ocean phenomena, just from a different source.</p>
+            </div>
+            <div class="limitation">
+                <h4>Unanalyzed border <span class="tag-mini">Missed detections</span></h4>
+                <p>The 300×300 px window can't be computed within about 150 px of any image edge, leaving a NaN margin around the whole scene. Any spill sitting in that border would be silently excluded — a limitation that scales directly with window size.</p>
+            </div>
+        </section>
+
+        <section id="outcomes">
+            <h2>7. What this project actually taught me</h2>
+            <div class="outcomes">
+                <div class="outcome">
+                    <span class="idx">CLOUD-NATIVE GEOSPATIAL</span>
+                    <h4>Working with STAC &amp; the Planetary Computer</h4>
+                    <p>Querying and streaming petabyte-scale satellite archives directly, instead of downloading full scenes — the difference between a workflow that scales and one that doesn't.</p>
+                </div>
+                <div class="outcome">
+                    <span class="idx">SAR IMAGE PHYSICS</span>
+                    <h4>Radiometric correction &amp; backscatter</h4>
+                    <p>Understanding why terrain-corrected products are non-negotiable for cross-scene comparison, and how the same physical process (wave damping) both explains and confounds detection.</p>
+                </div>
+                <div class="outcome">
+                    <span class="idx">ALGORITHM DESIGN</span>
+                    <h4>Adaptive vs. global thresholding</h4>
+                    <p>Designing a spatially varying decision rule from first principles, and reasoning about how a moving-window parameter trades off sensitivity, noise, and edge coverage.</p>
+                </div>
+                <div class="outcome">
+                    <span class="idx">CRITICAL EVALUATION</span>
+                    <h4>Validating against independent ground truth</h4>
+                    <p>Benchmarking automated output against SkyTruth's manual delineation — and being precise about where the method agrees, and where it simply can't discriminate.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2>8. Explore the full work</h2>
+            <ul class="resources">
+                <li><a href="A2_Chaourar.pdf" target="_blank" rel="noopener">Full report (PDF) →</a></li>
+                <li><a href="sara_chaourar_oil_spill.pptx" target="_blank" rel="noopener">Presentation slides →</a></li>
+                <li><a href="#" target="_blank" rel="noopener">Jupyter notebook →</a></li>
+            </ul>
+            <p style="margin-top:12px; font-size:0.85rem; color:var(--text-faint);">Swap the notebook link above for your GitHub / nbviewer URL once it's hosted.</p>
+        </section>
+
+        <footer>
+            <p>Method and case study adapted from <em>SAR-based Oil Slicks Detection: An Adaptive Local Thresholding Approach</em>, S. Chaourar, Paris Lodron University of Salzburg, 2026. Ground truth: SkyTruth. Imagery: ESA Copernicus Sentinel-1, accessed via the Microsoft Planetary Computer.</p>
+            <p>Sara Chaourar — Analysis &amp; Modeling, Remote Sensing · <a href="mailto:sara.chaourar@stud.plus.ac.at">sara.chaourar@stud.plus.ac.at</a></p>
+        </footer>
+
+    </main>
+
+<script>
+// ---------- Interactive adaptive threshold demo ----------
+(function(){
+  const canvas = document.getElementById('threshCanvas');
+  const ctx = canvas.getContext('2d');
+  const winSlider = document.getElementById('winSlider');
+  const offSlider = document.getElementById('offSlider');
+  const winVal = document.getElementById('winVal');
+  const offVal = document.getElementById('offVal');
+  const readout = document.getElementById('readout');
+
+  const N = 220;
+  let profile = [];
+  (function seed(){
+    let base = -14;
+    for(let i=0;i<N;i++){
+      base += (Math.random()-0.5)*1.4;
+      base = Math.max(-24, Math.min(-4, base));
+      let v = base + (Math.random()-0.5)*3.2;
+      if(i > N*0.38 && i < N*0.62){
+        const center = N*0.5;
+        const dist = Math.abs(i-center)/(N*0.12);
+        v -= Math.max(0, 9 - dist*9);
+      }
+      profile.push(v);
+    }
+  })();
+
+  function movingMean(arr, windowPx){
+    const half = Math.max(1, Math.round((windowPx/480)*60));
+    const out = [];
+    for(let i=0;i<arr.length;i++){
+      let s=0,c=0;
+      for(let j=Math.max(0,i-half); j<=Math.min(arr.length-1,i+half); j++){ s+=arr[j]; c++; }
+      out.push(s/c);
+    }
+    return out;
+  }
+
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * devicePixelRatio;
+    canvas.height = 220 * devicePixelRatio;
+    canvas.style.height = '220px';
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+
+  function render(){
+    const winPx = parseInt(winSlider.value,10);
+    const offset = parseInt(offSlider.value,10)/10;
+    winVal.textContent = winPx + ' px';
+    offVal.textContent = offset.toFixed(1) + ' dB';
+
+    const mean = movingMean(profile, winPx);
+    const W = canvas.getBoundingClientRect().width;
+    const H = 220;
+    const min=-26, max=-2;
+    const xAt = i => (i/(N-1))*W;
+    const yAt = v => H - ((v-min)/(max-min))*H;
+
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+    ctx.lineWidth=1;
+    for(let g=0; g<=4; g++){
+      const y = (g/4)*H;
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#666666';
+    ctx.lineWidth = 1.4;
+    profile.forEach((v,i)=>{ const x=xAt(i), y=yAt(v); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#2f6f6b';
+    ctx.lineWidth = 1.6;
+    mean.forEach((v,i)=>{ const x=xAt(i), y=yAt(v); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+
+    const thresh = mean.map(v=>v-offset);
+    ctx.beginPath();
+    ctx.strokeStyle = '#a13a2f';
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([4,3]);
+    thresh.forEach((v,i)=>{ const x=xAt(i), y=yAt(v); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    let flagged = 0;
+    ctx.fillStyle = '#1a1a1a';
+    profile.forEach((v,i)=>{
+      if(v < thresh[i]){
+        flagged++;
+        ctx.beginPath();
+        ctx.arc(xAt(i), yAt(v), 2.2, 0, Math.PI*2);
+        ctx.fill();
+      }
+    });
+    readout.textContent = flagged + ' / ' + N + ' candidate px flagged';
+  }
+
+  window.addEventListener('resize', ()=>{ resizeCanvas(); render(); });
+  winSlider.addEventListener('input', render);
+  offSlider.addEventListener('input', render);
+  resizeCanvas();
+  render();
+})();
+</script>
+
+</body>
+</html>
